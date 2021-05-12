@@ -1,11 +1,7 @@
 import React, {useState, useRef} from "react";
 // import L from 'leaflet'
 import { MapContainer, TileLayer, useMapEvents, FeatureGroup} from "react-leaflet";
-// import  EditControl  from "./EditControl"
-// import { Icon } from "leaflet";
-// import * as parkData from "./data/skateboard-parks.json";
-// import DefaultTile from '../TileLayers/DefaultTile'
-// import Control from "react-leaflet-control";
+import {Box,Flex,Spinner, Tooltip }from "@chakra-ui/react"
 import "./Map.css";
 
 const bounds = [
@@ -39,6 +35,14 @@ const bounds = [
     // setDrawing(!drawing)
 }
   return (
+    <Box
+      pos="fixed"
+      top="0"
+      right="0"
+      bottom="0"
+      left="0"
+      w="100%"
+      h="100%">
     <MapContainer 
       bounds={bounds} 
       // style={{height:"80vh"}}
@@ -81,6 +85,8 @@ const bounds = [
                     /> */}
         </FeatureGroup>
     </MapContainer>
+    </Box>
+    
   );
 }
 export default MapComponent
