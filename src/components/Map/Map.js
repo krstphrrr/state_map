@@ -1,13 +1,27 @@
 import React, {useState, useRef} from "react";
-// import L from 'leaflet'
-import { MapContainer, TileLayer, useMapEvents, FeatureGroup} from "react-leaflet";
+import * as L from 'leaflet'
+import { MapContainer, TileLayer, useMapEvents,WMSTileLayer, FeatureGroup,LayerGroup, LayersControl} from "react-leaflet";
 import {Box,Flex,Spinner, Tooltip }from "@chakra-ui/react"
 import "./Map.css";
-
+// -106.864014,32.551444,-106.188354,32.994843
 const bounds = [
-  [51.0156176,-69.393794],
-  [27.213765,-131.539653]
+  [32.551444,-106.864014],
+  [32.994843,-106.188354]
 ]
+
+const testLayer = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms?tiled=true');
+const tileURL = 'https://landscapedatacommons.org/geoserver/statemap/wms'
+const wmsOptions = {
+  layers: 'statemap:jerstatemapsimple',
+  format: 'image/png',
+  transparent: true,
+  // tiled: true,
+  version: '1.3.0',
+  maxZoom: 20
+}
+const googOpt = {
+
+}
 
 // function testFunction() {
   
@@ -48,42 +62,42 @@ const bounds = [
       // style={{height:"80vh"}}
       zoom={10}
       maxZoom={15}
-      center={[41.14269416, -108.721814]}
+      center={[32.66368, -106.68771]}
       className="map-styles"
       zoomControl={false}
       >
       
-      <TileLayer 
+      {/* <TileLayer 
         zoom={5}
         url='https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
         maxZoom={15}
         subdomains={['mt0','mt1','mt2','mt3']}>
 
-        </TileLayer>
+        </TileLayer> */}
 
         {/* <AddMarkerToClick></AddMarkerToClick> */}
-        <FeatureGroup >
-     
-          {/* <EditControl
-            // ref={editRef}
-            position='topright'
-            onClicked={handleClick}
-            //here you can specify your shape options and which handler you want to enable
-            draw={{
-                rectangle: false,
-                circle: false,
-                polyline: false,
-                circlemarker: false,
-                marker: false,
-                polygon: {
-                    allowIntersection: false,
-                    shapeOptions: {
-                        color: "#ff0000"
-                    },
-                }
-            }}
-                    /> */}
-        </FeatureGroup>
+        <LayersControl position="topright">
+          <LayersControl.BaseLayer checked name="OpenStreetMap.Mapnik">
+            <TileLayer
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer checked name="google">
+            <TileLayer
+              subdomains={['mt0','mt1','mt2','mt3']}
+              url="https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
+            />
+        </LayersControl.BaseLayer>
+        <LayersControl.Overlay checked name="Layer group ">
+          <LayerGroup>
+            <WMSTileLayer url={tileURL} params={wmsOptions}>
+
+            </WMSTileLayer>
+            
+          </LayerGroup>
+          </LayersControl.Overlay>
+        </LayersControl>
     </MapContainer>
     </Box>
     

@@ -17,7 +17,9 @@ function App({Component}) {
         {/* sidebar component */}
         <Sidebar></Sidebar>
         {/* map component */}
-        <MapC></MapC>
+        <MapC>
+          
+        </MapC>
       </Flex>
         // <React.Fragment>
         //   <div className="ui equal width center aligned padded grid">
