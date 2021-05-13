@@ -14,7 +14,9 @@ function App({Component}) {
     // array w data = initial render + after data has changed
     return (
       <Flex flexDir="column" minH={0} h="100%" w="100%" overflow="hidden">
+        {/* sidebar component */}
         <Sidebar></Sidebar>
+        {/* map component */}
         <MapC></MapC>
       </Flex>
         // <React.Fragment>

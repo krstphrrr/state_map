@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Box, Stack, useDisclosure } from "@chakra-ui/react";
 // import Header from "./header";
-// import Layers from "./layers";
+import Layers from "../layers/layers";
 // import SidebarMenu from "./sidebar-menu";
 // import config from "@uidaholib/shared/constants/config";
 
@@ -20,7 +20,7 @@ const Sidebar = () => {
         flex="1"
         minH={0}
         zIndex={45}
-      >oooo
+      >column space for Sidebar
         <Flex
           flexDir="column"
           w="100%"
@@ -35,9 +35,9 @@ const Sidebar = () => {
           color="gray.700"
           boxShadow="lg"
         >
-        ooo
+        actual Sidebar
           {/* <Header title={title} onOpen={onOpen} /> */}
-          {/* <Layers /> */}
+          <Layers />
         </Flex>
       </Flex>
     </>
