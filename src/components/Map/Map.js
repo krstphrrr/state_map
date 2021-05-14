@@ -1,8 +1,11 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import * as L from 'leaflet'
-import { MapContainer, TileLayer, useMapEvents,WMSTileLayer, FeatureGroup,LayerGroup, LayersControl} from "react-leaflet";
+import { MapContainer, TileLayer, useMapEvents,WMSTileLayer, FeatureGroup,LayerGroup, LayersControl,GeoJSON} from "react-leaflet";
 import {Box,Flex,Spinner, Tooltip }from "@chakra-ui/react"
 import "./Map.css";
+import axios from "axios";
+import hash from 'object-hash'
+
 // -106.864014,32.551444,-106.188354,32.994843
 const bounds = [
   [32.551444,-106.864014],
@@ -10,19 +13,26 @@ const bounds = [
 ]
 
 const testLayer = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms?tiled=true');
-const tileURL = 'https://landscapedatacommons.org/geoserver/statemap/wms'
+const tileURL = 'https://landscapedatacommons.org/geoserver/statemap/wfs'
 const wmsOptions = {
   layers: 'statemap:jerstatemapsimple',
-  format: 'image/png',
-  transparent: true,
+  // format: 'image/png',
+  // transparent: true,
   // tiled: true,
-  version: '1.3.0',
-  maxZoom: 20
-}
-const googOpt = {
-
+  version: '2.0.0',
+  // maxZoom: 20
 }
 
+ 
+const geoOptions = {
+  outputFormat: 'application/json',
+  count:6155,
+  request: 'GetFeature',
+  service: 'WFS',
+  typeName: 'statemap:jerstatemapsimple',
+  version: '2.0.0',
+  srsName:'EPSG:4326'
+};
 // function testFunction() {
   
 // }
@@ -30,8 +40,30 @@ const googOpt = {
  function MapComponent() {
   // intento de mapdraw control 
   const editRef = useRef()
-  const [drawing, setDrawing] = useState(false)
+  const [data, setData] = useState(null)
+  const [geoHash, setgeoHash] = useState(null)
 
+  useEffect(()=>{
+    let gHash = setgeoHash(hash("bleh"))
+    // let gHash = (gh) =>{console.log()}
+    axios.get(tileURL,{params:geoOptions})
+    .then(({data})=>{
+      setData(data)
+      console.log(data)
+      console.log(geoHash)
+    })
+    .catch(error=>console.log(error))
+  },[data,geoHash])
+
+  let style =  {
+      // fillColor: '',
+      weight: 1,
+      opacity: 1,
+      color: 'red',
+      fillOpacity: .5
+    };
+
+  
   const handleClick = () => {
         
     //Edit this method to perform other actions
@@ -91,9 +123,13 @@ const googOpt = {
         </LayersControl.BaseLayer>
         <LayersControl.Overlay checked name="Layer group ">
           <LayerGroup>
-            <WMSTileLayer url={tileURL} params={wmsOptions}>
+            {/* <WMSTileLayer url={tileURL} params={wmsOptions}>
 
-            </WMSTileLayer>
+            </WMSTileLayer> */}
+
+            <GeoJSON key={geoHash} data={data} style={style}>
+
+            </GeoJSON>
             
           </LayerGroup>
           </LayersControl.Overlay>
