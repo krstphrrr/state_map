@@ -13,12 +13,13 @@ const bounds = [
 ]
 
 const testLayer = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms?tiled=true');
+const wmsURL = 'https://landscapedatacommons.org/geoserver/statemap/wms'
 const tileURL = 'https://landscapedatacommons.org/geoserver/statemap/wfs'
 const wmsOptions = {
   layers: 'statemap:jerstatemapsimple',
-  // format: 'image/png',
+  format: 'image/png',
   // transparent: true,
-  // tiled: true,
+  tiled: true,
   version: '2.0.0',
   // maxZoom: 20
 }
@@ -50,10 +51,10 @@ const geoOptions = {
     .then(({data})=>{
       setData(data)
       console.log(data)
-      console.log(geoHash)
+      // console.log(geoHash)
     })
     .catch(error=>console.log(error))
-  },[data,geoHash])
+  },[])
 
   let style =  {
       // fillColor: '',
@@ -109,7 +110,7 @@ const geoOptions = {
 
         {/* <AddMarkerToClick></AddMarkerToClick> */}
         <LayersControl position="topright">
-          <LayersControl.BaseLayer checked name="OpenStreetMap.Mapnik">
+          <LayersControl.BaseLayer name="OpenStreetMap.Mapnik">
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -121,15 +122,27 @@ const geoOptions = {
               url="https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
             />
         </LayersControl.BaseLayer>
-        <LayersControl.Overlay checked name="Layer group ">
+        <LayersControl.Overlay  name="WFS test ">
           <LayerGroup>
-            {/* <WMSTileLayer url={tileURL} params={wmsOptions}>
+            {/* <WMSTileLayer url={wmsURL} params={wmsOptions}>
 
             </WMSTileLayer> */}
 
             <GeoJSON key={geoHash} data={data} style={style}>
 
             </GeoJSON>
+            
+          </LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="WMS test ">
+          <LayerGroup>
+            <WMSTileLayer url={wmsURL} params={wmsOptions}>
+
+            </WMSTileLayer>
+
+            {/* <GeoJSON key={geoHash} data={data} style={style}>
+
+            </GeoJSON> */}
             
           </LayerGroup>
           </LayersControl.Overlay>
